@@ -1,0 +1,106 @@
+[build-system]
+requires = [
+    "hatchling"
+]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.version]
+path = "src/jmullan/tree/__about__.py"
+
+
+[project]
+name = "jmullan-tree"
+description = "I could build a tree"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "jmullan_cmd@git+http://github.com/jmullan/jmullan_cmd"
+]
+dynamic = ["version"]
+authors = [
+    {name = "Jesse Mullan", email="jmullan@gmail.com"}
+]
+maintainers = [
+    {name = "Jesse Mullan", email="jmullan@gmail.com"}
+]
+classifiers = [
+    "Topic :: Software Development",
+    "Intended Audience :: Developers"
+]
+keywords = ["cli"]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "isort",
+    "mdformat",
+    "mypy",
+    "pre-commit",
+    "pytest",
+    "ruff",
+]
+build = [
+    "build",
+    "hatch",
+    "pip",
+]
+
+[project.urls]
+homepage = "https://github.com/jmullan/jmullan-tree"
+documentation = "https://github.com/jmullan/jmullan-tree"
+repository = "https://github.com/jmullan/jmullan-tree"
+
+[project.scripts]
+jmullan-tree = "jmullan.tree.__main__:main"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "/.github"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/jmullan"]
+
+[tool.mypy]
+namespace_packages = true
+explicit_package_bases = true
+mypy_path = "src:tests"
+ignore_missing_imports = true
+enable_error_code = [
+    "ignore-without-code"
+]
+
+[tool.ruff]
+line-length = 120
+lint.select = [
+  "E",   # pycodestyle
+  "F",   # pyflakes
+  "UP",  # pyupgrade
+  # "D",   # pydocstyle
+  # "I",   # isort (disabled because ruff was complaining but isort was not)
+]
+
+[tool.isort]
+py_version=311
+profile = "black"
+src_paths = ["src", "tests"]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 100
+extend_skip = "migrations"
+order_by_type = false
+combine_as_imports = true
+known_third_party = "django"
+known_internal = ["jmullan"]
+known_first_party = ["jmullan.tree"]
+sections=["FUTURE", "STDLIB", "THIRDPARTY", "INTERNAL", "FIRSTPARTY", "LOCALFOLDER"]
+
+[tool.black]  # https://black.readthedocs.io/en/stable/pyproject_toml.html
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
