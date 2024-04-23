@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 class TreeMain(cmd.Main):
     def __init__(self):
         super().__init__()
-        easy_logging.easy_initialize_logging(log_level="INFO", stream=sys.stderr)
         self.parser.add_argument(dest="files", nargs="*")
         self.parser.add_argument("--indent", type=int, required=False, default=None)
         self.parser.add_argument("--color", action="store_true", default=False)
@@ -21,6 +20,10 @@ class TreeMain(cmd.Main):
 
     def main(self):
         super().main()
+        if self.args.verbose:
+            easy_logging.easy_initialize_logging(log_level="DEBUG", stream=sys.stderr)
+        else:
+            easy_logging.easy_initialize_logging(log_level="INFO", stream=sys.stderr)
         files = self.args.files or []
         if not files:
             files = ["."]

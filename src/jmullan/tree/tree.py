@@ -1,8 +1,11 @@
 import abc
 import dataclasses
+import logging
 import os
 import typing
 from typing import Any, Generic, TypeVar
+
+logger = logging.getLogger(__name__)
 
 T = TypeVar("T")
 
@@ -54,10 +57,12 @@ class Arborist:
     def make_tree(
         self, item: Any, prefix: str | None = None, second_prefix: str | None = None, depth: int = 0
     ):
+        logger.debug(f"Making tree from {item}")
         if depth is None:
             depth = 0
         depth = depth + 1
         if self.max_depth is not None and depth > self.max_depth:
+            logger.debug(f"Reached max depth {depth} of {self.max_depth}")
             return
         if prefix is None:
             prefix = ""
@@ -67,7 +72,6 @@ class Arborist:
         base = self.seed.get_base(item)
         if not self.color or self.seed.is_leaf(item):
             print(f"{prefix}{base}")
-            return
         else:
             if self.color:
                 print(f"{prefix}{BRANCH_COLOR}{base}{RESET}")
@@ -135,13 +139,14 @@ class DirectorySeed(Seed[Entry]):
     def get_children(self, item: Entry) -> list[Entry]:
         dirs = []
         files = []
-        with os.scandir(item.path) as directory:
-            for entry in directory:
-                if valid_name(entry.name):
-                    if entry.is_dir():
-                        dirs.append(entry)
-                    else:
-                        files.append(entry)
+        if os.path.isdir(item.path):
+            with os.scandir(item.path) as directory:
+                for entry in directory:
+                    if valid_name(entry.name):
+                        if entry.is_dir():
+                            dirs.append(entry)
+                        else:
+                            files.append(entry)
         if self.should_sort:
             dirs = list(sorted(dirs, key=lambda d: d.name))
             files = list(sorted(files, key=lambda d: d.name))

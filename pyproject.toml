@@ -40,6 +40,7 @@ dev = [
     "mypy",
     "pre-commit",
     "pytest",
+    "pytest-helpers-namespace",
     "ruff",
 ]
 build = [
