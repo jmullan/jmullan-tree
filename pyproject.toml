@@ -12,12 +12,12 @@ path = "src/jmullan/tree/__about__.py"
 
 
 [project]
-name = "jmullan-tree"
+name = "jmullan.tree"
 description = "I could build a tree"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 dependencies = [
-    "jmullan_cmd@git+http://github.com/jmullan/jmullan_cmd"
+    "jmullan_cmd@git+https://github.com/jmullan/jmullan_cmd"
 ]
 dynamic = ["version"]
 authors = [
